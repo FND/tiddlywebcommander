@@ -29,7 +29,7 @@ nav {
 
 nav {
 	overflow: hidden;
-	padding-left: 1px; /* compensate for collapsed borders */
+	border-bottom: 1px solid #AAA;
 	background-color: #EEE;
 }
 
@@ -38,7 +38,7 @@ nav ul {
 	width: 20%;
 	height: 100%;
 	float: left;
-	margin-left: -1px; /* collapse double borders */
+	border-right: 1px solid #AAA;
 	padding-top: 1px; /* compensate for collapsed borders */
 	list-style-type: none;
 }
@@ -46,6 +46,7 @@ nav ul {
 nav li {
 	margin-top: -1px; /* collapse double borders */
 	border: 1px solid #CCC;
+	border-width: 1px 0;
 	padding: 5px;
 	background-color: #F8F8F8;
 }
