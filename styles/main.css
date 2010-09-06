@@ -1,0 +1,51 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	height: 100%;
+	overflow: hidden; /* hide excessive vertical size due to box model math */
+}
+
+header,
+section,
+nav {
+	display: block; /* XXX: required for Firefox!? */
+}
+
+header {
+	height: 10%;
+	border-bottom: 1px solid #888;
+	color: #FFF;
+	background-color: #000;
+}
+
+section,
+nav {
+	height: 45%;
+}
+
+nav {
+	overflow: hidden;
+	padding-left: 1px; /* compensate for collapsed borders */
+	background-color: #EEE;
+}
+
+nav ul {
+	overflow: auto;
+	width: 20%;
+	height: 100%;
+	float: left;
+	margin-left: -1px; /* collapse double borders */
+	padding-top: 1px; /* compensate for collapsed borders */
+	list-style-type: none;
+}
+
+nav li {
+	margin-top: -1px; /* collapse double borders */
+	border: 1px solid #CCC;
+	padding: 5px;
+	background-color: #F8F8F8;
+}
