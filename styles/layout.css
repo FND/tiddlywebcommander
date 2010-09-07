@@ -1,0 +1,26 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	height: 100%;
+	overflow: hidden; /* hide excessive height due to box-model math (borders) */
+}
+
+header,
+nav,
+article {
+	display: block; /* XXX: required for legacy browsers */
+}
+
+.pane {
+	height: 45%;
+	overflow: auto;
+	border-bottom: 1px solid #AAA;
+}
+
+.pane:first-child {
+	height: 10%;
+}

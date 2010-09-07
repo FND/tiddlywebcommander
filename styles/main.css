@@ -1,50 +1,38 @@
-* {
-	margin: 0;
-	padding: 0;
-}
-
-html,
-body {
-	height: 100%;
-	overflow: hidden; /* hide excessive vertical size due to box model math */
-}
-
 header,
-section,
-nav {
-	display: block; /* XXX: required for Firefox!? */
+nav,
+article {
+	height: 100%;
 }
 
 header {
-	height: 10%;
-	border-bottom: 1px solid #888;
 	color: #FFF;
 	background-color: #000;
 }
 
-section,
 nav {
-	height: 45%;
-}
-
-nav {
-	overflow: hidden;
-	border-bottom: 1px solid #AAA;
 	background-color: #EEE;
 }
 
+article {
+	background-color: #FFF;
+}
+
+nav ul,
+nav li {
+	margin-top: -1px; /* collapse double borders */
+}
+
 nav ul {
-	overflow: auto;
 	width: 20%;
 	height: 100%;
+	overflow: auto;
 	float: left;
 	border-right: 1px solid #AAA;
-	padding-top: 1px; /* compensate for collapsed borders */
+	padding-top: 1px; /* compensate for children's collapsed borders */
 	list-style-type: none;
 }
 
 nav li {
-	margin-top: -1px; /* collapse double borders */
 	border: 1px solid #CCC;
 	border-width: 1px 0;
 	padding: 5px;

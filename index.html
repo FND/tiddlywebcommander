@@ -4,6 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>TiddlyWeb Explorer</title>
+	<link rel="stylesheet" href="styles/layout.css">
 	<link rel="stylesheet" href="styles/main.css">
 	<!--[if lte IE 8]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -11,41 +12,63 @@
 </head>
 
 <body>
-	<header>
-		<h1>TiddlyWebAdmin</h1>
-	</header>
+	<div class="pane">
+		<header>
+			<h1>TiddlyWebAdmin</h1>
+		</header>
+	</div>
 
-	<nav>
-		<ul>
-			<li>recipes</li>
-			<li class="selected">bags</li>
-		</ul>
-		<ul>
-			<li>alpha</li>
-			<li>bravo</li>
-			<li class="selected">charlie</li>
-			<li>delta</li>
-		</ul>
-		<ul>
-			<li class="selected">foo</li>
-			<li>bar</li>
-			<li>baz</li>
-		</ul>
-		<ul>
-			<li>#1</li>
-			<li class="selected">#2</li>
-			<li>#3</li>
-		</ul>
-	</nav>
-	<section>
-		[entity details]
-	</section>
+	<div class="pane">
+		<nav>
+			<ul>
+				<li>recipes</li>
+				<li class="selected">bags</li>
+			</ul>
+			<ul>
+				<li>alpha</li>
+				<li>bravo</li>
+				<li class="selected">charlie</li>
+				<li>delta</li>
+			</ul>
+			<ul>
+				<li class="selected">foo</li>
+				<li>bar</li>
+				<li>baz</li>
+			</ul>
+			<ul>
+				<li>#1</li>
+				<li class="selected">#2</li>
+				<li>#3</li>
+			</ul>
+		</nav>
+	</div>
+
+	<div class="pane">
+		<article>
+			<p>[entity details]</p>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+			<p>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+		</article>
+	</div>
 
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 	<script src="scripts/main.js"></script>
-	<script>
-		/* ... */
-	</script>
 </body>
 
 </html>
