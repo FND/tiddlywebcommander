@@ -41,6 +41,18 @@ nav li {
 	cursor: pointer;
 }
 
+.button {
+	border: 1px solid #CCC;
+	padding: 2px 5px;
+	text-decoration: none;
+	color: #1C94C4;
+	background-color: #F6F6F6;
+}
+
+.button:focus {
+	outline: none;
+}
+
 .selected {
 	font-weight: bold;
 	color: #FFF;
@@ -50,4 +62,13 @@ nav li {
 .disabled {
 	color: #AAA;
 	cursor: auto;
+}
+
+#btnFullscreen {
+	display: block;
+	float: right;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	border-top-width: 0;
+	border-right-width: 0;
 }
