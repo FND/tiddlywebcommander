@@ -30,6 +30,7 @@ nav ul {
 	border-right: 1px solid #AAA;
 	padding-top: 1px; /* compensate for children's collapsed borders */
 	list-style-type: none;
+	color: #000;
 }
 
 nav li {
@@ -44,4 +45,9 @@ nav li {
 	font-weight: bold;
 	color: #FFF;
 	background-color: #3D8CFF;
+}
+
+.disabled {
+	color: #AAA;
+	cursor: auto;
 }

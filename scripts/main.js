@@ -1,7 +1,7 @@
 (function($) {
 
 $("li").live("click", function(ev) {
-	$(this).
+	$(this).not(".disabled").
 		siblings().removeClass("selected").end().
 		toggleClass("selected");
 });
