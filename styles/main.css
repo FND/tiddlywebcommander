@@ -66,12 +66,17 @@ nav li {
 	cursor: auto;
 }
 
+.info {
+	background-color: #FCEFA1;
+}
+
 .error {
 	background-color: #F88;
 }
 
 #notification {
 	display: none;
+	cursor: pointer;
 }
 
 #btnFullscreen {
