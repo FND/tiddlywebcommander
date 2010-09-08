@@ -18,11 +18,13 @@ article {
 }
 
 nav ul,
+nav ol,
 nav li {
 	margin-top: -1px; /* collapse double borders */
 }
 
-nav ul {
+nav ul,
+nav ol {
 	width: 20%;
 	height: 100%;
 	overflow: auto;
@@ -62,6 +64,14 @@ nav li {
 .disabled {
 	color: #AAA;
 	cursor: auto;
+}
+
+.error {
+	background-color: #F88;
+}
+
+#notification {
+	display: none;
 }
 
 #btnFullscreen {
