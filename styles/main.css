@@ -24,6 +24,12 @@ nav li {
 }
 
 nav ul,
+nav ol,
+nav li a {
+	color: #000;
+}
+
+nav ul,
 nav ol {
 	width: 20%;
 	height: 100%;
@@ -32,15 +38,30 @@ nav ol {
 	border-right: 1px solid #AAA;
 	padding-top: 1px; /* compensate for children's collapsed borders */
 	list-style-type: none;
-	color: #000;
 }
 
 nav li {
 	border: 1px solid #CCC;
 	border-width: 1px 0;
-	padding: 5px;
 	background-color: #F8F8F8;
+}
+
+nav li a {
+	display: block;
+	padding: 5px;
+	text-decoration: none;
 	cursor: pointer;
+}
+
+nav li a:link,
+nav li a:visited,
+nav li a:hover {
+}
+nav li a:active {
+	outline: none;
+}
+nav li a:focus {
+	outline-offset: -1px; /* hack to prevent Firefox from widening the element (despite the spec!) */
 }
 
 .button {
@@ -49,6 +70,7 @@ nav li {
 	text-decoration: none;
 	color: #1C94C4;
 	background-color: #F6F6F6;
+	cursor: pointer;
 }
 
 .button:focus {

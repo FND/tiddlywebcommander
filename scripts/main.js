@@ -7,12 +7,13 @@ var init = function() {
 	col.items = ["recipes", "bags", "users"]; // no sorting -- XXX: hacky?
 	col.listType = "ul";
 	col = col.render();
-	$("li:last", col).addClass("disabled").unbind("click"); // XXX: hacky?
+	$("li:last a", col).addClass("disabled").unbind("click"); // XXX: hacky?
 
-	$("li").live("click", function(ev) { // XXX: breaks encapsulation!?
-		$(this).not(".disabled").
-			siblings().removeClass("selected").end().
-			addClass("selected");
+	$("nav li a").live("click", function(ev) { // XXX: breaks encapsulation!?
+		$(this).blur(). // hack to prevent Firefox from invoking :focus
+			not(".disabled").closest("li").
+				siblings().children().removeClass("selected").end().end().
+				find("a").addClass("selected");
 	});
 
 	$("#btnFullscreen").click(function(ev) {
@@ -142,7 +143,9 @@ Column.prototype.render = function() {
 	var self = this;
 	this.node = $("<" + this.listType + " />").data("column", this).
 		append($.map(this.items, function(item, i) {
-			return $("<li />").text(item).click(self.onClick)[0];
+			var btn = $('<a href="javascript:;" />').text(item).
+				click(self.onClick);
+			return $("<li />").append(btn)[0];
 		})).
 		appendTo(this.container);
 	return this.el;
@@ -188,7 +191,7 @@ $.ajax = function(options) {
 				var rand = Math.random();
 				item = {
 					title: path[path.length - 1],
-					revision: Math.floor(rand * 1000 * item + 1),
+					revision: Math.floor(rand * 1000 * item + 1)
 				};
 				item[container.type] = container.name;
 				return item;
