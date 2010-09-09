@@ -15,12 +15,20 @@ article {
 	display: block; /* XXX: required for legacy browsers */
 }
 
+.pane,
+#notification {
+	border-bottom: 1px solid #AAA;
+}
+
 .pane {
 	height: 45%;
 	overflow: auto;
-	border-bottom: 1px solid #AAA;
 }
 
 .pane:first-child {
 	height: 10%;
+}
+
+#notification {
+	display: none;
 }
