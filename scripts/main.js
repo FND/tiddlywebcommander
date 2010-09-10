@@ -141,14 +141,14 @@ var Column = function(type, items) {
 };
 Column.prototype.render = function() {
 	var self = this;
-	this.node = $("<" + this.listType + " />").data("column", this).
+	this.node = $("<" + this.listType + " />").
 		append($.map(this.items, function(item, i) {
 			var btn = $('<a href="javascript:;" />').text(item).
 				click(self.onClick);
 			return $("<li />").append(btn)[0];
 		})).
 		appendTo(this.container);
-	return this.el;
+	return this.node;
 };
 
 // XXX: DEBUG
