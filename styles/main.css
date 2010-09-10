@@ -17,14 +17,7 @@ article {
 	background-color: #FFF;
 }
 
-nav ul,
-nav ol,
-nav li {
-	margin-top: -1px; /* collapse double borders */
-}
-
-nav ul,
-nav ol,
+nav,
 nav li a {
 	color: #000;
 }
@@ -36,13 +29,11 @@ nav ol {
 	overflow: auto;
 	float: left;
 	border-right: 1px solid #AAA;
-	padding-top: 1px; /* compensate for children's collapsed borders */
 	list-style-type: none;
 }
 
 nav li {
-	border: 1px solid #CCC;
-	border-width: 1px 0;
+	border-bottom: 1px solid #CCC;
 	background-color: #F8F8F8;
 }
 
