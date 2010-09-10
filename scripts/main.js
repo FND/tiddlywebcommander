@@ -142,11 +142,22 @@ var Column = function(type, items) {
 		columnActions[type].apply(this, [name, self]);
 	};
 };
-Column.prototype.controls = $("<input />"); // XXX: DEBUG
+Column.prototype.controls = $("<input />").change(function(ev) {
+	var el = $(this);
+	var filter = el.val();
+	var items = el.closest(".column").find("li");
+	if(filter) {
+		filter = "a:contains(" + filter + ")";
+		items.find(filter).parent().slideDown().end().end().
+			find("a").not(filter).parent().slideUp();
+	} else {
+		items.slideDown();
+	}
+});
 Column.prototype.render = function() {
 	// TODO: templating
 	var heading = this.label ? $("<h3 />").text(this.label) : null;
-	var controls = this.controls ? this.controls.clone() : null;
+	var controls = this.controls ? this.controls.clone(true) : null;
 	this.node = $('<section class="column" />').append(heading).append(controls);
 	var self = this;
 	$("<" + this.listType + " />").
