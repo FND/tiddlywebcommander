@@ -3,9 +3,11 @@
 var host = "/"; // TODO: calculate
 
 var init = function() {
-	var col = new Column("root", []);
+	var col = new Column("index", []);
 	col.items = ["recipes", "bags", "users"]; // no sorting -- XXX: hacky?
 	col.listType = "ul";
+	delete col.label;
+	col.controls = null;
 	col = col.render();
 	$("li:last a", col).addClass("disabled").unbind("click"); // XXX: hacky?
 
@@ -55,7 +57,7 @@ var errback = function(xhr, error, exc) {
 };
 
 var columnActions = { // XXX: rename?
-	root: function(name, column) { // XXX: rename?
+	index: function(name, column) { // XXX: rename?
 		var collection = new tiddlyweb.Collection(name, host);
 		var callback = function(data, status, xhr) {
 			cmd.addNavColumn(column.node, name, data);
@@ -126,6 +128,7 @@ var columnActions = { // XXX: rename?
 
 var Column = function(type, items) {
 	this.type = type;
+	this.label = tiddlyweb._capitalize(type); // XXX: hacky?
 	this.listType = "ol";
 	this.container = $("nav"); // XXX: selector too unspecific?!
 	this.items = items.sort(function(a, b) { // XXX: inefficient!?
@@ -139,16 +142,21 @@ var Column = function(type, items) {
 		columnActions[type].apply(this, [name, self]);
 	};
 };
+Column.prototype.controls = $("<input />"); // XXX: DEBUG
 Column.prototype.render = function() {
+	// TODO: templating
+	var heading = this.label ? $("<h3 />").text(this.label) : null;
+	var controls = this.controls ? this.controls.clone() : null;
+	this.node = $('<section class="column" />').append(heading).append(controls);
 	var self = this;
-	this.node = $("<" + this.listType + " />").
+	$("<" + this.listType + " />").
 		append($.map(this.items, function(item, i) {
 			var btn = $('<a href="javascript:;" />').text(item).
 				click(self.onClick);
 			return $("<li />").append(btn)[0];
 		})).
-		appendTo(this.container);
-	return this.node;
+		appendTo(this.node);
+	return this.node.appendTo(this.container);
 };
 
 // XXX: DEBUG

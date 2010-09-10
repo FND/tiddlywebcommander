@@ -1,3 +1,7 @@
+body {
+	font-family: sans-serif;
+}
+
 header {
 	color: #FFF;
 	background-color: #000;
@@ -17,17 +21,25 @@ nav li a {
 	color: #000;
 }
 
-nav ul,
-nav ol {
+.column {
 	width: 20%;
 	height: 100%;
-	overflow: auto;
+	overflow: auto; /* XXX: should be on UL/OL, but full-height is tricky then */
 	float: left;
 	border-right: 1px solid #AAA;
+}
+
+.column ul,
+.column ol {
+	border-top: 1px solid #CCC;
 	list-style-type: none;
 }
 
-nav li {
+.column:first-child ul {
+	border-top: none;
+}
+
+.column li {
 	border-bottom: 1px solid #CCC;
 	background-color: #F8F8F8;
 }
