@@ -144,15 +144,15 @@ var Column = function(type, items) {
 };
 Column.prototype.controls = $("<input />").change(function(ev) {
 	var el = $(this);
-	var filter = el.val();
-	var items = el.closest(".column").find("li");
-	if(filter) {
-		filter = "a:contains(" + filter + ")";
-		items.find(filter).parent().slideDown().end().end().
-			find("a").not(filter).parent().slideUp();
-	} else {
-		items.slideDown();
-	}
+	var filter = el.val().toLowerCase();
+	el.closest(".column").find("li").each(function(i, item) {
+		var el = $(this);
+		if(el.find("a").text().toLowerCase().indexOf(filter) != -1) {
+			el.slideDown();
+		} else {
+			el.slideUp();
+		}
+	});
 });
 Column.prototype.render = function() {
 	// TODO: templating
