@@ -11,6 +11,7 @@ body {
 
 header,
 nav,
+section,
 article {
 	display: block; /* XXX: required for legacy browsers */
 }
