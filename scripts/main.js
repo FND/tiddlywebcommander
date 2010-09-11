@@ -8,7 +8,7 @@ var init = function() {
 	col.listType = "ul";
 	delete col.label;
 	col.controls = null;
-	col = col.render();
+	col = col.render().appendTo("nav.pane");
 	$("li:last a", col).addClass("disabled").unbind("click"); // XXX: hacky?
 
 	$("nav li a").live("click", function(ev) { // XXX: breaks encapsulation!?
@@ -30,7 +30,7 @@ var cmd = tiddlyweb.commander = {
 		if(items) {
 			col.data = items;
 		}
-		col.render();
+		col.render().appendTo("nav.pane");
 	},
 	toggleFullscreen: function() { // TODO: argument to avoid hard-coding the last pane
 		var els = $(".pane:visible");
@@ -143,7 +143,6 @@ var Column = function(type, items) {
 	this.type = type;
 	this.label = tiddlyweb._capitalize(type); // XXX: hacky?
 	this.listType = "ol";
-	this.container = $("nav"); // XXX: selector too unspecific?!
 	this.items = items.sort(function(a, b) { // XXX: inefficient!?
 		var x = a.toLowerCase ? a.toLowerCase() : a;
 		var y = b.toLowerCase ? b.toLowerCase() : b;
@@ -178,7 +177,7 @@ Column.prototype.render = function() {
 			return $("<li />").append(btn)[0];
 		})).
 		appendTo(this.node);
-	return this.node.appendTo(this.container);
+	return this.node;
 };
 
 // XXX: DEBUG
