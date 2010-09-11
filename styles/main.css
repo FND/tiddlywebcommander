@@ -21,29 +21,6 @@ nav li a {
 	color: #000;
 }
 
-.column {
-	width: 20%;
-	height: 100%;
-	overflow: auto; /* XXX: should be on UL/OL, but full-height is tricky then */
-	float: left;
-	border-right: 1px solid #AAA;
-}
-
-.column ul,
-.column ol {
-	border-top: 1px solid #CCC;
-	list-style-type: none;
-}
-
-.column:first-child ul {
-	border-top: none;
-}
-
-.column li {
-	border-bottom: 1px solid #CCC;
-	background-color: #F8F8F8;
-}
-
 nav li a {
 	display: block;
 	padding: 5px;
@@ -60,6 +37,38 @@ nav li a:active {
 }
 nav li a:focus {
 	outline-offset: -1px; /* hack to prevent Firefox from widening the element (despite the spec!) */
+}
+
+.column {
+	width: 20%;
+	height: 100%;
+	overflow: auto; /* XXX: should be on UL/OL, but full-height is tricky then */
+	float: left;
+	border-right: 1px solid #AAA;
+}
+
+.column h3 {
+	display: none;
+}
+
+.column input {
+	display: block;
+	width: 95%; /* XXX: 100% would be more desirable, but leads to excessive width */
+	margin: 2px auto;
+}
+.column ul,
+.column ol {
+	border-top: 1px solid #CCC;
+	list-style-type: none;
+}
+
+.column:first-child ul {
+	border-top: none;
+}
+
+.column li {
+	border-bottom: 1px solid #CCC;
+	background-color: #F8F8F8;
 }
 
 .button {
