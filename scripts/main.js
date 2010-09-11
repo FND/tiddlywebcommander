@@ -51,6 +51,19 @@ var cmd = tiddlyweb.commander = {
 	}
 };
 
+var filterList = function(ev) {
+	var el = $(this);
+	var filter = el.val().toLowerCase();
+	el.closest(".column").find("li").each(function(i, item) {
+		var el = $(this);
+		if(el.find("a").text().toLowerCase().indexOf(filter) != -1) {
+			el.slideDown();
+		} else {
+			el.slideUp();
+		}
+	});
+};
+
 var errback = function(xhr, error, exc) {
 	var msg = xhr.statusText + ": " + xhr.responseText;
 	cmd.notify(msg, "error");
@@ -142,20 +155,18 @@ var Column = function(type, items) {
 		columnActions[type].apply(this, [name, self]);
 	};
 };
-Column.prototype.controls = $("<input />").change(function(ev) {
-	var el = $(this);
-	var filter = el.val().toLowerCase();
-	el.closest(".column").find("li").each(function(i, item) {
-		var el = $(this);
-		if(el.find("a").text().toLowerCase().indexOf(filter) != -1) {
-			el.slideDown();
-		} else {
-			el.slideUp();
+Column.prototype.controls = $('<input type="search" placeholder="filter" />'). // XXX: i18n
+	change(filterList).keyup(function(ev) {
+		var filter = $(this).val();
+		if(filter.length > 2) {
+			clearTimeout(this.timeout || null);
+			var self = this;
+			this.timeout = setTimeout(function() {
+				filterList.apply(self, []);
+			}, 500);
 		}
 	});
-});
 Column.prototype.render = function() {
-	// TODO: templating
 	var heading = this.label ? $("<h3 />").text(this.label) : null;
 	var controls = this.controls ? this.controls.clone(true) : null;
 	this.node = $('<section class="column" />').append(heading).append(controls);
