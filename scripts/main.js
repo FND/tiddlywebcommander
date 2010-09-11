@@ -108,18 +108,18 @@ var columnActions = { // XXX: rename?
 			return tid.title != name;
 		});
 
-		var ecallback = function(tid, status, xhr) {
+		var eCallback = function(tid, status, xhr) {
 			tid.render().replaceAll(".pane article"); // XXX: selector too unspecific?!
 		};
-		tid.get(ecallback, errback);
+		tid.get(eCallback, errback);
 
-		var ccallback = function(data, status, xhr) {
+		var cCallback = function(data, status, xhr) {
 			var names = $.map(data, function(item, i) {
 				return item.revision;
 			});
 			cmd.addNavColumn(column.node, "revisions", names, data);
 		};
-		tid.revisions().get(ccallback, errback);
+		tid.revisions().get(cCallback, errback);
 	},
 	revisions: function(name, column) { // TODO: DRY (cf. tiddlers)
 		var tid;
@@ -128,10 +128,10 @@ var columnActions = { // XXX: rename?
 			return tid.revision != name;
 		});
 		var rev = new tiddlyweb.Revision(tid.revision, tid);
-		var ecallback = function(tid, status, xhr) {
+		var callback = function(tid, status, xhr) {
 			tid.render().replaceAll(".pane article"); // XXX: selector too unspecific?!
 		};
-		rev.get(ecallback, errback);
+		rev.get(callback, errback);
 	}
 };
 
