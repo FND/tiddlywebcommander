@@ -79,15 +79,19 @@ var columnActions = { // XXX: rename?
 	},
 	recipes: function(name, column) {
 		var recipe = new tiddlyweb.Recipe(name, host);
-		var callback = function(data, status, xhr) {
+
+		var eCallback = function(recipe, status, xhr) {
+			recipe.render().replaceAll(".pane article"); // XXX: selector too unspecific?!
+		};
+		recipe.get(eCallback, errback);
+
+		var cCallback = function(data, status, xhr) {
 			var titles = $.map(data, function(item, i) {
 				return item.title;
 			});
 			cmd.addNavColumn(column.node, "tiddlers", titles, data);
 		};
-		recipe.tiddlers().get(callback, errback);
-		// XXX: DEBUG
-		$("article").empty().text(name); // XXX: selector too unspecific?!
+		recipe.tiddlers().get(cCallback, errback);
 	},
 	bags: function(name, column) { // TODO: DRY (cf. recipes)
 		var bag = new tiddlyweb.Bag(name, host);
@@ -176,6 +180,16 @@ Column.prototype.render = function() {
 	return this.node;
 };
 
+tiddlyweb.Recipe.prototype.render = function() {
+	var lbl = $("<h3 />").text(this.name);
+	var desc = $("<p />").text(this.desc);
+	var content = $.map(this.recipe, function(item, i) {
+		return item[1] ? item[0] + "?" + item[1] : item[0];
+	}).join("\n");
+	content = $("<pre />").text(content);
+	return $("<article />").append(lbl).append(desc).append(content);
+};
+
 tiddlyweb.Tiddler.prototype.render = function() {
 	var lbl = $("<h3 />").text(this.title);
 	var txt = $("<pre />").text(this.text);
@@ -236,16 +250,30 @@ $.ajax = function(options, isCallback) {
 			break;
 		default:
 			var type = path.pop();
-			if(type == "tiddlers") {
-				data = {
-					title: resource,
-					text: "lorem ipsum\ndolor sit amet\n\nconsectetur adipisicing elit\nsed do eiusmod tempor"
-				};
-			} else if(type == "revisions") {
-				data = {
-					title: path.pop(),
-					text: "lorem ipsum\ndolor sit amet"
-				};
+			switch(type) {
+				case "recipes":
+					data = {
+						desc: "lorem ipsum dolor sit amet",
+						policy: {},
+						recipe: [
+							["Alpha", ""],
+							["Charlie", "select=tag:foo"],
+							["Bravo", ""]
+						]
+					};
+					break;
+				case "tiddlers":
+					data = {
+						title: resource,
+						text: "lorem ipsum\ndolor sit amet\n\nconsectetur adipisicing elit\nsed do eiusmod tempor"
+					};
+					break;
+				case "revisions":
+					data = {
+						title: path.pop(),
+						text: "lorem ipsum\ndolor sit amet"
+					};
+					break;
 			}
 	}
 	if(data) {
