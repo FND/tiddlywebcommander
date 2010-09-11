@@ -182,7 +182,13 @@ Column.prototype.render = function() {
 };
 
 // XXX: DEBUG
-$.ajax = function(options) {
+$.ajax = function(options, isCallback) {
+	if(!isCallback) {
+		return setTimeout(function() {
+			$.ajax(options, true);
+		}, 500);
+	}
+
 	var xhr = {};
 	var data;
 
@@ -202,7 +208,7 @@ $.ajax = function(options) {
 			var recipe = path[1] == "recipes" ? path[2] : undefined;
 			data = $.map(["Foo", "Bar", "Baz"], function(item, i) {
 				item = {
-					title: item,
+					title: bag + "::" + item,
 					bag: bag
 				};
 				if(recipe) {
