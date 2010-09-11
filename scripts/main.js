@@ -95,15 +95,27 @@ var columnActions = { // XXX: rename?
 	},
 	bags: function(name, column) { // TODO: DRY (cf. recipes)
 		var bag = new tiddlyweb.Bag(name, host);
-		var callback = function(data, status, xhr) {
+
+		var eCallback = function(bag, status, xhr) {
+			bag.render().replaceAll(".pane article"); // XXX: selector too unspecific?!
+		};
+		var eErrback = function(xhr, error, exc) {
+			if(xhr.status == 401) {
+				bag.desc = "unauthorized"; // XXX: i18n -- XXX: hacky?
+				bag.render().replaceAll(".pane article").addClass("error"); // XXX: selector too unspecific?!
+			} else {
+				errback.apply(this, arguments);
+			}
+		};
+		bag.get(eCallback, eErrback);
+
+		var cCallback = function(data, status, xhr) {
 			var titles = $.map(data, function(item, i) {
 				return item.title;
 			});
 			cmd.addNavColumn(column.node, "tiddlers", titles, data);
 		};
-		bag.tiddlers().get(callback, errback);
-		// XXX: DEBUG
-		$("article").empty().text(name); // XXX: selector too unspecific?!
+		bag.tiddlers().get(cCallback, errback);
 	},
 	tiddlers: function(name, column) {
 		var tid;
@@ -190,6 +202,12 @@ tiddlyweb.Recipe.prototype.render = function() {
 	return $("<article />").append(lbl).append(desc).append(content);
 };
 
+tiddlyweb.Bag.prototype.render = function() {
+	var lbl = $("<h3 />").text(this.name);
+	var desc = $("<p />").text(this.desc);
+	return $("<article />").append(lbl).append(desc);
+};
+
 tiddlyweb.Tiddler.prototype.render = function() {
 	var lbl = $("<h3 />").text(this.title);
 	var txt = $("<pre />").text(this.text);
@@ -261,6 +279,16 @@ $.ajax = function(options, isCallback) {
 							["Bravo", ""]
 						]
 					};
+					break;
+				case "bags":
+					data = {
+						desc: "lorem ipsum dolor sit amet",
+						policy: {}
+					};
+					if(resource == "Bravo") {
+						data = null;
+						xhr.status = 401;
+					}
 					break;
 				case "tiddlers":
 					data = {
