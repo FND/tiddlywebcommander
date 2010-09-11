@@ -109,9 +109,7 @@ var columnActions = { // XXX: rename?
 		});
 
 		var ecallback = function(tid, status, xhr) {
-			var lbl = $("<h3 />").text(tid.title);
-			var txt = $("<pre />").text(tid.text);
-			$("article").empty().append(lbl).append(txt); // XXX: selector too unspecific?!
+			tid.render().replaceAll(".pane article"); // XXX: selector too unspecific?!
 		};
 		tid.get(ecallback, errback);
 
@@ -131,9 +129,7 @@ var columnActions = { // XXX: rename?
 		});
 		var rev = new tiddlyweb.Revision(tid.revision, tid);
 		var ecallback = function(tid, status, xhr) {
-			var lbl = $("<h3 />").text(tid.title);
-			var txt = $("<pre />").text(tid.text);
-			$("article").empty().append(lbl).append(txt); // XXX: selector too unspecific?!
+			tid.render().replaceAll(".pane article"); // XXX: selector too unspecific?!
 		};
 		rev.get(ecallback, errback);
 	}
@@ -178,6 +174,12 @@ Column.prototype.render = function() {
 		})).
 		appendTo(this.node);
 	return this.node;
+};
+
+tiddlyweb.Tiddler.prototype.render = function() {
+	var lbl = $("<h3 />").text(this.title);
+	var txt = $("<pre />").text(this.text);
+	return $("<article />").append(lbl).append(txt);
 };
 
 // XXX: DEBUG
