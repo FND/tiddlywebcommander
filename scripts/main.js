@@ -227,7 +227,9 @@ $.ajax = function(options, isCallback) {
 
 	cmd.notify("URI: " + options.url);
 
-	var path = options.url.split("/");
+	var path = $.map(options.url.split("/"), function(item, i) {
+		return decodeURIComponent(item);
+	});
 	var resource = path.pop();
 	switch(resource) {
 		case "recipes":
