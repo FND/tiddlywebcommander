@@ -195,23 +195,67 @@ Column.prototype.render = function() {
 tiddlyweb.Recipe.prototype.render = function() {
 	var lbl = $("<h3 />").text(this.name);
 	var desc = $("<p />").text(this.desc);
+	var policy = this.policy.render();
 	var content = $.map(this.recipe, function(item, i) {
 		return item[1] ? item[0] + "?" + item[1] : item[0];
 	}).join("\n");
 	content = $("<pre />").text(content);
-	return $("<article />").append(lbl).append(desc).append(content);
+	return $("<article />").append(lbl).append(desc).append(policy).
+		append(content);
 };
 
 tiddlyweb.Bag.prototype.render = function() {
 	var lbl = $("<h3 />").text(this.name);
 	var desc = $("<p />").text(this.desc);
-	return $("<article />").append(lbl).append(desc);
+	var policy = this.policy ? this.policy.render() : null;
+	return $("<article />").append(lbl).append(desc).append(policy);
 };
 
 tiddlyweb.Tiddler.prototype.render = function() {
 	var lbl = $("<h3 />").text(this.title);
 	var txt = $("<pre />").text(this.text);
 	return $("<article />").append(lbl).append(txt);
+};
+
+tiddlyweb.Policy.prototype.render = function() {
+	// TODO: templating
+	var table = $('<table class="policy"><thead><tr><th /></tr></thead></table>');
+	$("<caption />").text("owner: " + this.owner).prependTo(table); // XXX: inelegant -- XXX: i18n
+	var row = table.find("tr");
+	var self = this;
+	var users = [];
+	var roles = [];
+	$.each(this.constraints, function(i, constraint) {
+		if(constraint != "owner" && self[constraint]) {
+			$("<th />").text(constraint).appendTo(row);
+			$.each(self[constraint], function(i, item) { // TODO: DRY
+				if(item.indexOf("R:") == 0) {
+					if(roles.indexOf(item) == -1) {
+						roles.push(item);
+					}
+				} else {
+					if(users.indexOf(item) == -1) {
+						users.push(item);
+					}
+				}
+			});
+		}
+	});
+	$.each(users.concat(roles), function(i, user) {
+		var row = $("<tr />").appendTo(table);
+		$("<td />").text(user).appendTo(row);
+		$.each(self.constraints, function(i, constraint) {
+			if(constraint != "owner" && self[constraint]) {
+				var cell = $('<td><input type="checkbox" /></td>').appendTo(row);
+				if(self[constraint].length == 0 ||
+						$.inArray(user, self[constraint]) != -1) {
+					cell.find("input").attr("checked", "checked");
+				}
+			}
+		});
+	});
+
+	return table;
 };
 
 // XXX: DEBUG
@@ -274,7 +318,11 @@ $.ajax = function(options, isCallback) {
 				case "recipes":
 					data = {
 						desc: "lorem ipsum dolor sit amet",
-						policy: {},
+						policy: new tiddlyweb.Policy({
+							"read": [],
+							"manage": ["R:ADMIN"],
+							"owner": "administrator"
+						}),
 						recipe: [
 							["Alpha", ""],
 							["Charlie", "select=tag:foo"],
@@ -285,7 +333,15 @@ $.ajax = function(options, isCallback) {
 				case "bags":
 					data = {
 						desc: "lorem ipsum dolor sit amet",
-						policy: {}
+						policy: new tiddlyweb.Policy({
+							"read": [],
+							"write": ["fnd", "cdent", "psd"],
+							"create": ["ANY"],
+							"delete": ["NONE"],
+							"manage": ["R:ADMIN"],
+							"accept": ["R:ADMIN"],
+							"owner": "administrator"
+						})
 					};
 					if(resource == "Bravo") {
 						data = null;
