@@ -241,7 +241,12 @@ tiddlyweb.Policy.prototype.render = function() {
 			});
 		}
 	});
-	$.each(users.concat(roles), function(i, user) {
+
+	var entries = users.concat(roles);
+	if(entries.length == 0) {
+		entries = [""]; // XXX: hacky?
+	}
+	$.each(entries, function(i, user) {
 		var row = $("<tr />").appendTo(table);
 		$("<td />").text(user).appendTo(row);
 		$.each(self.constraints, function(i, constraint) {
