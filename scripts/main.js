@@ -227,7 +227,7 @@ tiddlyweb.Policy.prototype.render = function() {
 	var roles = [];
 	$.each(this.constraints, function(i, constraint) {
 		if(constraint != "owner" && self[constraint]) {
-			$("<th />").text(constraint).appendTo(row);
+			$("<th />").text(constraint).appendTo(row); // XXX: i18n
 			$.each(self[constraint], function(i, item) { // TODO: DRY
 				if(item.indexOf("R:") == 0) {
 					if(roles.indexOf(item) == -1) {
@@ -244,7 +244,7 @@ tiddlyweb.Policy.prototype.render = function() {
 
 	var entries = users.concat(roles);
 	if(entries.length == 0) {
-		entries = [""]; // XXX: hacky?
+		entries = [""]; // XXX: hacky; use "anonymous"?
 	}
 	$.each(entries, function(i, user) {
 		var row = $("<tr />").appendTo(table);
@@ -276,6 +276,33 @@ tiddlyweb.Policy.prototype.render = function() {
 	addRow(null, $("tr:last td:first", table));
 
 	return table;
+};
+tiddlyweb.Policy.prototype.deserialize = function(el) { // XXX: rename (inconsitent with "render")?
+	// XXX: cannot detect empty constraint lists
+	var self = this;
+	$.each(this.constraints, function(i, constraint) {
+		if(constraint != "owner") {
+			self[constraint] = [];
+		}
+	});
+	var columns = $("thead th", el).map(function(i, node) {
+		return $(node).text() || null; // XXX: brittle (i18n)
+	}).get();
+	$("tr", el).slice(1).each(function(i, node) {
+		var cells = $("td", node);
+		var entry = cells.eq(0);
+		var field = entry.find("input");
+		entry = field.length ? field.val() : entry.text();
+		if(entry.length > 0) {
+			cells.slice(1).each(function(i, node) {
+				var checked = $(node).find("input").attr("checked");
+				if(checked) {
+					var constraint = columns[i];
+					self[constraint].push(entry);
+				}
+			});
+		}
+	});
 };
 
 // XXX: DEBUG
