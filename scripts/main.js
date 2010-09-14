@@ -255,6 +255,21 @@ tiddlyweb.Policy.prototype.render = function() {
 		});
 	});
 
+	var addRow = function(ev, cell) { // XXX: use as both event handler and regular function hacky?
+		var el = cell || $(this);
+		if(cell || el.val().length > 0) {
+			var field = $('<input type="text" placeholder="new user/role" />'). // XXX: i18n
+				change(addRow).hide();
+			var table = el.closest("table");
+			el.closest("tr").clone().
+				find("td:first").empty().append(field).end().
+				find("input[type=checkbox]").removeAttr("checked").end().
+				appendTo(table);
+			field.fadeIn(); // slideDown preferable, but problematic for TRs
+		}
+	};
+	addRow(null, $("tr:last td:first", table));
+
 	return table;
 };
 
