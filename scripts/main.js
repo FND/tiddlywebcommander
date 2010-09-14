@@ -214,7 +214,7 @@ tiddlyweb.Bag.prototype.render = function() {
 tiddlyweb.Tiddler.prototype.render = function() {
 	var lbl = $("<h3 />").text(this.title);
 	var txt = $("<pre />").text(this.text);
-	return $("<article />").append(lbl).append(txt);
+	return $("<article />").data("tiddler", this).append(lbl).append(txt);
 };
 
 tiddlyweb.Policy.prototype.render = function() {
