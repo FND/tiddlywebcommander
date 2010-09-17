@@ -40,6 +40,17 @@ nav li a:focus {
 	outline-offset: -1px; /* hack to prevent Firefox from widening the element (despite the spec!) */
 }
 
+footer {
+	display: table;
+	width: 100%;
+}
+
+footer p {
+	display: table-cell;
+	vertical-align: middle;
+	padding-left: 5px;
+}
+
 .column {
 	width: 20%;
 	height: 100%;
@@ -96,16 +107,18 @@ nav li a:focus {
 	cursor: auto;
 }
 
+.info,
+.error {
+	color: #000;
+	cursor: pointer;
+}
+
 .info {
 	background-color: #FCEFA1;
 }
 
 .error {
 	background-color: #F88;
-}
-
-#notification {
-	cursor: pointer;
 }
 
 #btnFullscreen {

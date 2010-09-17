@@ -46,8 +46,15 @@ var cmd = tiddlyweb.commander = {
 	},
 	notify: function(msg, type) {
 		type = type || "info";
-		$("#notification").addClass(type).text(msg).slideDown("slow").
-			click(function(ev) { $(this).slideUp(); });
+		var el = $("footer.pane p");
+		if(el.data("originalMessage") === null) {
+			el.data("originalMessage", el.text());
+		}
+		el.addClass(type).text(msg).unbind("click").click(function(ev) {
+			var el = $(this);
+			var msg = el.data("originalMessage");
+			el.removeClass(type).text(msg);
+		});
 	}
 };
 

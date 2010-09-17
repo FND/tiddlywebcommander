@@ -17,8 +17,7 @@ article {
 	display: block; /* XXX: required for legacy browsers */
 }
 
-.pane,
-#notification {
+.pane {
 	border-bottom: 1px solid #AAA;
 }
 
@@ -37,8 +36,4 @@ nav.pane {
 
 footer.pane {
 	height: 5%;
-}
-
-#notification {
-	display: none;
 }
