@@ -2,7 +2,8 @@ body {
 	font-family: sans-serif;
 }
 
-header {
+header,
+footer {
 	color: #FFF;
 	background-color: #000;
 }

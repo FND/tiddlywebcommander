@@ -10,6 +10,7 @@ body {
 }
 
 header,
+footer,
 nav,
 section,
 article {
@@ -28,6 +29,14 @@ article {
 
 .pane:first-child {
 	height: 10%;
+}
+
+nav.pane {
+	height: 40%;
+}
+
+footer.pane {
+	height: 5%;
 }
 
 #notification {
