@@ -248,8 +248,11 @@ tiddlyweb.Policy.prototype.render = function() {
 		$.each(self.constraints, function(i, constraint) {
 			if(constraint != "owner" && self[constraint]) {
 				var cell = $('<td><input type="checkbox" /></td>').appendTo(row);
-				if(self[constraint].length == 0 ||
-						$.inArray(user, self[constraint]) != -1) {
+				if(self[constraint].length == 0) {
+					var column = $.inArray(constraint, self.constraints) + 1;
+					cell = cell.closest("table").find("tr:eq(1) td").eq(column);
+					cell.find("input").attr("checked", "checked");
+				} else if($.inArray(user, self[constraint]) != -1) {
 					cell.find("input").attr("checked", "checked");
 				}
 			}
