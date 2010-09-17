@@ -226,11 +226,12 @@ tiddlyweb.Tiddler.prototype.render = function() {
 
 tiddlyweb.Policy.prototype.render = function() {
 	var self = this;
+	var specialValues = tiddlyweb.Policy.specialValues;
 	// TODO: templating
-	var table = $('<table class="policy"><thead><tr><th /></tr></thead></table>');
+	var table = $('<table class="policy"><thead><tr><th /></tr></thead></table>').
+		data("policy", this);
 	$("<caption />").text("owner: " + this.owner).prependTo(table); // XXX: inelegant -- XXX: i18n
-	var row = table.find("tr");
-	var magic = ["anonymous", "ANY", "NONE"]; // XXX: rename -- XXX: i18n
+	var row = table.find("tr:first");
 	var users = [];
 	var roles = [];
 	$.each(this.constraints, function(i, constraint) {
@@ -238,26 +239,28 @@ tiddlyweb.Policy.prototype.render = function() {
 			$("<th />").text(constraint).appendTo(row); // XXX: i18n
 			$.each(self[constraint], function(i, item) {
 				if(item.indexOf("R:") == 0) {
-					if($.inArray(item, roles) == -1) {
-						roles.push(item);
-					}
-				} else if($.inArray(item, magic.concat(users)) == -1) {
-					users.push(item);
+					pushUnique(item, roles);
+				} else if($.inArray(item, specialValues) == -1) {
+					pushUnique(item, users);
 				}
 			});
 		}
 	});
 
-	var entries = magic.concat(users).concat(roles);
+	var tbody = $("<tbody />").appendTo(table);
+	var entries = specialValues.concat(users).concat(roles);
 	$.each(entries, function(i, user) {
-		var row = $("<tr />").appendTo(table);
+		var row = $("<tr />").appendTo(tbody);
+		if($.inArray(user, specialValues) != -1) {
+			row.addClass("special"); // XXX: rename
+		}
 		$("<td />").text(user).appendTo(row);
 		$.each(self.constraints, function(i, constraint) {
 			if(constraint != "owner" && self[constraint]) {
 				var cell = $('<td><input type="checkbox" /></td>').appendTo(row);
 				if(self[constraint].length == 0) {
 					var column = $.inArray(constraint, self.constraints) + 1;
-					cell = cell.closest("table").find("tr:eq(1) td").eq(column);
+					cell = cell.closest("table").find("tbody tr:first td").eq(column);
 					cell.find("input").attr("checked", "checked");
 				} else if($.inArray(user, self[constraint]) != -1) {
 					cell.find("input").attr("checked", "checked");
@@ -266,49 +269,79 @@ tiddlyweb.Policy.prototype.render = function() {
 		});
 	});
 
+	$("input[type=checkbox]", tbody[0]).live("change", tiddlyweb.Policy.onChange);
+
 	var addRow = function(ev, cell) { // XXX: use as both event handler and regular function hacky?
 		var el = cell || $(this);
 		if(cell || el.val().length > 0) {
 			var field = $('<input type="text" placeholder="new user/role" />'). // XXX: i18n
 				change(addRow).hide();
-			var table = el.closest("table");
+			var tbody = el.closest("tbody");
 			el.closest("tr").clone().
 				find("td:first").empty().append(field).end().
 				find("input[type=checkbox]").removeAttr("checked").end().
-				appendTo(table);
+				appendTo(tbody);
 			field.fadeIn(); // slideDown preferable, but problematic for TRs
 		}
 	};
-	addRow(null, $("tr:last td:first", table));
+	addRow(null, $("tr:last td:first", tbody));
 
 	return table;
 };
-tiddlyweb.Policy.prototype.deserialize = function(el) { // XXX: rename (inconsitent with "render")?
-	// XXX: cannot detect empty constraint lists
-	var self = this;
-	$.each(this.constraints, function(i, constraint) {
-		if(constraint != "owner") {
-			self[constraint] = [];
+tiddlyweb.Policy.specialValues = ["anonymous", "ANY", "NONE"]; // XXX: rename -- XXX: i18n
+tiddlyweb.Policy.onChange = function(ev) {
+	var el = $(this);
+	var cell = el.closest("td");
+	var tbody = cell.closest("tbody");
+	var table = tbody.closest("table");
+	var policy = table.data("policy");
+
+	var entry = cell.closest("tr").find("td:first");
+	var field = entry.find("input");
+	entry = field.length ? field.val() : entry.text();
+
+	var colIndex = cell.prevAll().length;
+	var constraint = table.find("thead th").eq(colIndex).text(); // XXX: brittle (i18n)
+	var entries = policy[constraint];
+
+	var checked = $(el).attr("checked");
+	if($.inArray(entry, tiddlyweb.Policy.specialValues) == -1) {
+		if(!checked) {
+			removeItem(item, entries || []);
+		} else {
+			if(entries && entries.length) {
+				pushUnique(entry, policy[constraint]);
+			} else {
+				policy[constraint] = [entry];
+			}
 		}
-	});
-	var columns = $("thead th", el).map(function(i, node) {
-		return $(node).text() || null; // XXX: brittle (i18n)
-	}).get();
-	$("tr", el).slice(1).each(function(i, node) {
-		var cells = $("td", node);
-		var entry = cells.eq(0);
-		var field = entry.find("input");
-		entry = field.length ? field.val() : entry.text();
-		if(entry.length > 0) {
-			cells.slice(1).each(function(i, node) {
-				var checked = $(node).find("input").attr("checked");
-				if(checked) {
-					var constraint = columns[i];
-					self[constraint].push(entry);
-				}
-			});
-		}
-	});
+		// reset special values
+		$.each(tiddlyweb.Policy.specialValues, function(i, item) {
+			removeItem(item, entries || []);
+		});
+		$("tr.special", tbody).
+			find("td:nth-child(" + (colIndex + 1) + ") input[type=checkbox]").
+			removeAttr("checked"); // XXX: redraw entire table instead?
+	} else {
+		policy[constraint] = entry == "anonymous" ? [] : [entry];
+		// reset all entries -- XXX: DRY (see above)
+		cell.closest("tr").siblings().
+			find("td:nth-child(" + (colIndex + 1) + ") input[type=checkbox]").
+			removeAttr("checked");
+	}
+};
+
+var pushUnique = function(val, arr) {
+	if($.inArray(val, arr) == -1) {
+		arr.push(val);
+	}
+};
+
+var removeItem = function(val, arr) {
+	var pos = $.inArray(val, arr);
+	if(pos != -1) {
+		arr.splice(pos, 1);
+	}
 };
 
 // XXX: DEBUG
