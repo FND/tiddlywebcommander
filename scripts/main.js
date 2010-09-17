@@ -218,34 +218,30 @@ tiddlyweb.Tiddler.prototype.render = function() {
 };
 
 tiddlyweb.Policy.prototype.render = function() {
+	var self = this;
 	// TODO: templating
 	var table = $('<table class="policy"><thead><tr><th /></tr></thead></table>');
 	$("<caption />").text("owner: " + this.owner).prependTo(table); // XXX: inelegant -- XXX: i18n
 	var row = table.find("tr");
-	var self = this;
+	var magic = ["anonymous", "ANY", "NONE"]; // XXX: rename -- XXX: i18n
 	var users = [];
 	var roles = [];
 	$.each(this.constraints, function(i, constraint) {
 		if(constraint != "owner" && self[constraint]) {
 			$("<th />").text(constraint).appendTo(row); // XXX: i18n
-			$.each(self[constraint], function(i, item) { // TODO: DRY
+			$.each(self[constraint], function(i, item) {
 				if(item.indexOf("R:") == 0) {
-					if(roles.indexOf(item) == -1) {
+					if($.inArray(item, roles) == -1) {
 						roles.push(item);
 					}
-				} else {
-					if(users.indexOf(item) == -1) {
-						users.push(item);
-					}
+				} else if($.inArray(item, magic.concat(users)) == -1) {
+					users.push(item);
 				}
 			});
 		}
 	});
 
-	var entries = users.concat(roles);
-	if(entries.length == 0) {
-		entries = [""]; // XXX: hacky; use "anonymous"?
-	}
+	var entries = magic.concat(users).concat(roles);
 	$.each(entries, function(i, user) {
 		var row = $("<tr />").appendTo(table);
 		$("<td />").text(user).appendTo(row);
