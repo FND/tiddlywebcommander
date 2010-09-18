@@ -1,8 +1,14 @@
 (function($) {
 
-var host = "/"; // TODO: calculate
+var host;
 
 var init = function() {
+	host = getHost("/console");
+
+	$("header input").val(host).change(function(ev) {
+		host = $(this).val();
+	});
+
 	var col = new Column("index", []);
 	col.items = ["recipes", "bags", "users"]; // no sorting -- XXX: hacky?
 	col.listType = "ul";
@@ -329,6 +335,19 @@ tiddlyweb.Policy.onChange = function(ev) {
 			find("td:nth-child(" + (colIndex + 1) + ") input[type=checkbox]").
 			removeAttr("checked");
 	}
+};
+
+var getHost = function(cue) {
+	var loc = document.location;
+	if(loc.protocol == "file:") {
+		return "";
+	}
+	var uri = loc.protocol + "//" + loc.hostname;
+	if(loc.port && $.inArray(loc.port, ["80", "443"]) == -1) {
+		uri += ":" + loc.port;
+	}
+	var path = loc.pathname.indexOf(cue) != -1 ? loc.pathname.split(cue)[0] : "/";
+	return uri + path;
 };
 
 var pushUnique = function(val, arr) {
