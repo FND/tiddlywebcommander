@@ -4,14 +4,13 @@ var host;
 
 var init = function() {
 	host = getHost("/console");
-	$("header input").change(function(ev) {
-		host = $(this).val();
-		var statusBar = $("footer p");
-		$(".host", statusBar).text(host);
-		$.getJSON(host + "/status", function(data, status, xhr) {
-			$(".username", statusBar).text(data.username);
-		});
-	}).val(host).change();
+	document.location = document.location.toString().split("#")[0] + "#host:" + host;
+	// display host in status bar -- TODO: use onhashchange event to update live
+	var statusBar = $("footer p");
+	$(".host", statusBar).text(host);
+	$.getJSON(host + "/status", function(data, status, xhr) {
+		$(".username", statusBar).text(data.username);
+	});
 
 	var col = new Column("index", []);
 	col.items = ["recipes", "bags", "users", "info"]; // no sorting -- XXX: i18n -- XXX: info unnecessary!?
@@ -356,8 +355,11 @@ tiddlyweb.Policy.onChange = function(ev) {
 
 var getHost = function(cue) {
 	var loc = document.location;
-	if(loc.protocol == "file:") {
-		return "";
+	var host = loc.hash.split("host:")[1];
+	if(host) {
+		return host.replace(/\/$/, "");
+	} else if(loc.protocol == "file:") {
+		return "./";
 	}
 	var uri = loc.protocol + "//" + loc.hostname;
 	if(loc.port && $.inArray(loc.port, ["80", "443"]) == -1) {
