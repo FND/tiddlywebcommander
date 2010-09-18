@@ -8,6 +8,20 @@ footer {
 	background-color: #000;
 }
 
+header,
+footer {
+	display: table;
+	width: 100%;
+}
+
+header h1,
+footer p {
+	display: table-cell;
+	vertical-align: middle;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
 nav {
 	background-color: #EEE;
 }
@@ -33,18 +47,6 @@ nav li a:active {
 }
 nav li a:focus {
 	outline-offset: -1px; /* hack to prevent Firefox from widening the element (despite the spec!) */
-}
-
-footer {
-	display: table;
-	width: 100%;
-}
-
-footer p {
-	display: table-cell;
-	vertical-align: middle;
-	padding-left: 5px;
-	padding-right: 5px;
 }
 
 footer .username {
