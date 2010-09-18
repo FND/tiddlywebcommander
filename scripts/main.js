@@ -14,7 +14,7 @@ var init = function() {
 	}).val(host).change();
 
 	var col = new Column("index", []);
-	col.items = ["recipes", "bags", "users", "info"]; // no sorting -- XXX: i18n
+	col.items = ["recipes", "bags", "users", "info"]; // no sorting -- XXX: i18n -- XXX: info unnecessary!?
 	col.listType = "ul";
 	delete col.label;
 	col.controls = null;
