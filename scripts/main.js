@@ -222,7 +222,8 @@ Column.prototype.render = function() {
 };
 
 tiddlyweb.Recipe.prototype.render = function() {
-	var lbl = $("<h3 />").text(this.name);
+	var lbl = $("<h3 />");
+	$("<a />").attr("href", this.route()).text(this.name).appendTo(lbl);
 	var desc = $("<p />").text(this.desc);
 	var policy = this.policy.render();
 	var content = $.map(this.recipe, function(item, i) {
@@ -234,14 +235,16 @@ tiddlyweb.Recipe.prototype.render = function() {
 };
 
 tiddlyweb.Bag.prototype.render = function() {
-	var lbl = $("<h3 />").text(this.name);
+	var lbl = $("<h3 />");
+	$("<a />").attr("href", this.route()).text(this.name).appendTo(lbl);
 	var desc = $("<p />").text(this.desc);
 	var policy = this.policy ? this.policy.render() : null;
 	return $("<article />").append(lbl).append(desc).append(policy);
 };
 
 tiddlyweb.Tiddler.prototype.render = function() {
-	var lbl = $("<h3 />").text(this.title);
+	var lbl = $("<h3 />");
+	$("<a />").attr("href", this.route()).text(this.title).appendTo(lbl);
 	var txt = $("<pre />").text(this.text);
 	return $("<article />").data("tiddler", this).append(lbl).append(txt);
 };
@@ -399,6 +402,7 @@ $.ajax = function(options, isCallback) {
 		return decodeURIComponent(item);
 	});
 	var resource = path.pop();
+	var bag, recipe;
 	switch(resource) {
 		case "recipes":
 			data = ["Omega"];
@@ -407,8 +411,8 @@ $.ajax = function(options, isCallback) {
 			data = ["Alpha", "Bravo", "Charlie", "Delta"];
 			break;
 		case "tiddlers":
-			var bag = path[1] == "bags" ? path[2] : "Foxtrot";
-			var recipe = path[1] == "recipes" ? path[2] : undefined;
+			bag = path[1] == "bags" ? path[2] : "Foxtrot";
+			recipe = path[1] == "recipes" ? path[2] : undefined;
 			data = $.map(["Foo", "Bar", "Baz"], function(item, i) {
 				item = {
 					title: bag + "::" + item,
@@ -480,10 +484,16 @@ $.ajax = function(options, isCallback) {
 					}
 					break;
 				case "tiddlers":
+					bag = path[1] == "bags" ? path[2] : "Foxtrot";
+					recipe = path[1] == "recipes" ? path[2] : undefined;
 					data = {
 						title: resource,
-						text: "lorem ipsum\ndolor sit amet\n\nconsectetur adipisicing elit\nsed do eiusmod tempor"
+						text: "lorem ipsum\ndolor sit amet\n\nconsectetur adipisicing elit\nsed do eiusmod tempor",
+						bag: bag
 					};
+					if(recipe) {
+						data.recipe = recipe;
+					}
 					break;
 				case "revisions":
 					data = {
