@@ -10,12 +10,12 @@ var init = function() {
 	});
 
 	var col = new Column("index", []);
-	col.items = ["recipes", "bags", "users"]; // no sorting -- XXX: hacky?
+	col.items = ["recipes", "bags", "users", "info"]; // no sorting -- XXX: i18n
 	col.listType = "ul";
 	delete col.label;
 	col.controls = null;
 	col = col.render().appendTo("nav.pane");
-	$("li:last a", col).addClass("disabled").unbind("click"); // XXX: hacky?
+	$("li", col).eq(2).find("a").addClass("disabled").unbind("click"); // XXX: hacky?
 
 	$("nav li a").live("click", function(ev) { // XXX: breaks encapsulation!?
 		$(this).blur(). // hack to prevent Firefox from invoking :focus
@@ -84,11 +84,23 @@ var errback = function(xhr, error, exc) {
 
 var columnActions = { // XXX: rename?
 	index: function(name, column) { // XXX: rename?
-		var collection = new tiddlyweb.Collection(name, host);
-		var callback = function(data, status, xhr) {
-			cmd.addNavColumn(column.node, name, data);
-		};
-		collection.get(callback, errback);
+		if(name == "bags" || name == "recipes") {
+			var collection = new tiddlyweb.Collection(name, host);
+			var callback = function(data, status, xhr) {
+				cmd.addNavColumn(column.node, name, data);
+			};
+			collection.get(callback, errback);
+		} else if(name == "info") {
+			$.getJSON(host + "/status", function(data, status, xhr) {
+				// TODO: templating
+				var list = $("<dl />");
+				$("<dt />").text("current user").appendTo(list); // XXX: i18n
+				$("<dd />").text(data.username).appendTo(list); // XXX: i18n
+				$("<dt />").text("server version").appendTo(list); // XXX: i18n
+				$("<dd />").text(data.version).appendTo(list); // XXX: i18n
+				$(".pane article").empty().append(list); // XXX: selector too unspecific?!
+			});
+		}
 	},
 	recipes: function(name, column) {
 		var recipe = new tiddlyweb.Recipe(name, host);
@@ -416,6 +428,13 @@ $.ajax = function(options, isCallback) {
 				item[container.type] = container.name;
 				return item;
 			});
+			break;
+		case "status":
+			data = {
+				username: "GUEST",
+				challengers: ["cookie_form"],
+				version: "1.2.1"
+			};
 			break;
 		default:
 			var type = path.pop();
