@@ -56,6 +56,12 @@ footer p {
 	padding-left: 5px;
 }
 
+footer .username {
+	display: block;
+	float: right;
+	font-style: italic;
+}
+
 .pane article {
 	height: 100%;
 	background-color: #FFF;

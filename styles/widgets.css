@@ -12,9 +12,13 @@
 	padding: 2px 5px;
 }
 
+.policy caption,
+.policy tr.special {
+	font-style: italic;
+}
+
 .policy caption {
 	text-align: left;
-	font-style: italic;
 }
 
 .policy thead,
@@ -29,10 +33,6 @@
 
 .policy th {
 	padding: 2px 10px;
-}
-
-.policy tr.special {
-	font-style: italic;
 }
 
 .policy tr:nth-child(even) {

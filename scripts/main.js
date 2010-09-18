@@ -4,10 +4,14 @@ var host;
 
 var init = function() {
 	host = getHost("/console");
-
-	$("header input").val(host).change(function(ev) {
+	$("header input").change(function(ev) {
 		host = $(this).val();
-	});
+		var statusBar = $("footer p").text(host).
+			append('<span class="username" />');
+		$.getJSON(host + "/status", function(data, status, xhr) {
+			$(".username", statusBar).text(data.username);
+		});
+	}).val(host).change();
 
 	var col = new Column("index", []);
 	col.items = ["recipes", "bags", "users", "info"]; // no sorting -- XXX: i18n
@@ -53,13 +57,13 @@ var cmd = tiddlyweb.commander = {
 	notify: function(msg, type) {
 		type = type || "info";
 		var el = $("footer.pane p");
-		if(el.data("originalMessage") === null) {
-			el.data("originalMessage", el.text());
+		if(el.data("originalStatus") === null) {
+			el.data("originalStatus", el.html());
 		}
-		el.addClass(type).text(msg).unbind("click").click(function(ev) {
+		el.empty().addClass(type).text(msg).unbind("click").click(function(ev) {
 			var el = $(this);
-			var msg = el.data("originalMessage");
-			el.removeClass(type).text(msg);
+			var msg = el.data("originalStatus");
+			el.removeClass(type).html(msg);
 		});
 	}
 };
@@ -386,7 +390,10 @@ $.ajax = function(options, isCallback) {
 	var xhr = {};
 	var data;
 
-	cmd.notify("URI: " + options.url);
+	$.ajax.firstRun = $.ajax.firstRun === undefined;
+	if(!$.ajax.firstRun) {
+		cmd.notify("URI: " + options.url);
+	}
 
 	var path = $.map(options.url.split("/"), function(item, i) {
 		return decodeURIComponent(item);
