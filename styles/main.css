@@ -127,7 +127,7 @@ footer .username {
 }
 
 .error {
-	background-color: #F88;
+	background-color: #F88 !important;
 }
 
 #btnFullscreen {
