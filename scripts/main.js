@@ -6,8 +6,8 @@ var init = function() {
 	host = getHost("/console");
 	$("header input").change(function(ev) {
 		host = $(this).val();
-		var statusBar = $("footer p").text(host).
-			append('<span class="username" />');
+		var statusBar = $("footer p");
+		$(".host", statusBar).text(host);
 		$.getJSON(host + "/status", function(data, status, xhr) {
 			$(".username", statusBar).text(data.username);
 		});
@@ -56,15 +56,13 @@ var cmd = tiddlyweb.commander = {
 	},
 	notify: function(msg, type) {
 		type = type || "info";
-		var el = $("footer.pane p");
-		if(el.data("originalStatus") === null) {
-			el.data("originalStatus", el.html());
-		}
-		el.empty().addClass(type).text(msg).unbind("click").click(function(ev) {
-			var el = $(this);
-			var msg = el.data("originalStatus");
-			el.removeClass(type).html(msg);
-		});
+		var statusBar = $("footer .status").hide();
+		$("footer .notification").removeClass().addClass("notification").
+			empty().addClass(type).show().text(msg).unbind("click").
+			click(function(ev) {
+				$(this).removeClass(type).empty().hide();
+				statusBar.show();
+			});
 	}
 };
 
@@ -393,10 +391,7 @@ $.ajax = function(options, isCallback) {
 	var xhr = {};
 	var data;
 
-	$.ajax.firstRun = $.ajax.firstRun === undefined;
-	if(!$.ajax.firstRun) {
-		cmd.notify("URI: " + options.url);
-	}
+	cmd.notify("URI: " + options.url);
 
 	var path = $.map(options.url.split("/"), function(item, i) {
 		return decodeURIComponent(item);
