@@ -271,12 +271,12 @@ tiddlyweb.Policy.prototype.render = function() {
 
 	var tbody = $("<tbody />").appendTo(table);
 	var entries = specialValues.concat(users).concat(roles);
-	$.each(entries, function(i, user) {
+	$.each(entries, function(i, entry) {
 		var row = $("<tr />").appendTo(tbody);
-		if($.inArray(user, specialValues) != -1) {
+		if($.inArray(entry, specialValues) != -1) {
 			row.addClass("special"); // XXX: rename
 		}
-		$("<td />").text(user).appendTo(row);
+		$("<td />").text(entry).appendTo(row);
 		$.each(self.constraints, function(i, constraint) {
 			if(constraint != "owner" && self[constraint]) {
 				var cell = $('<td><input type="checkbox" /></td>').appendTo(row);
@@ -284,7 +284,7 @@ tiddlyweb.Policy.prototype.render = function() {
 					var column = $.inArray(constraint, self.constraints) + 1;
 					cell = cell.closest("table").find("tbody tr:first td").eq(column);
 					cell.find("input").attr("checked", "checked");
-				} else if($.inArray(user, self[constraint]) != -1) {
+				} else if($.inArray(entry, self[constraint]) != -1) {
 					cell.find("input").attr("checked", "checked");
 				}
 			}
