@@ -32,11 +32,11 @@ var cmd = tiddlyweb.commander = {
 		}
 		col.render().appendTo("nav.pane");
 	},
-	toggleFullscreen: function() { // TODO: argument to avoid hard-coding the last pane
+	toggleFullscreen: function() {
 		var els = $(".pane:visible");
-		if(els.length > 1) {
-			els.slice(0, -1).slideUp(function() {
-				els.eq(-1).css("height", "100%"); // XXX: executed multiple times
+		if(els.length > 2) {
+			els.slice(0, -2).slideUp(function() { // XXX: executed multiple times
+				els.eq(-2).css("height", "95%"); // XXX: hardcoded size
 			});
 		} else {
 			$(".pane").slideDown(function() { // XXX: fullscreen pane needs special handling to ensure smooth animation
