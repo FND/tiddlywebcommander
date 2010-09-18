@@ -9,9 +9,15 @@ footer {
 }
 
 header,
+header h1,
+footer,
+footer p {
+	width: 100%;
+}
+
+header,
 footer {
 	display: table;
-	width: 100%;
 }
 
 header h1,
