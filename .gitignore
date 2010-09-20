@@ -1,3 +1,5 @@
 scripts/jquery.js
 scripts/jquery-json.js
 scripts/chrjs.js
+scripts/chrjs.ui.js
+styles/widgets.js
