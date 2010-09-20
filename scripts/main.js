@@ -30,6 +30,14 @@ var init = function() {
 	$("#btnFullscreen").click(function(ev) {
 		cmd.toggleFullscreen();
 	});
+	$("#btnSave").click(function(ev) {
+		cmd.saveEntity();
+	});
+};
+
+var errback = function(xhr, error, exc) {
+	var msg = xhr.statusText + ": " + xhr.responseText;
+	cmd.notify(msg, "error");
 };
 
 var cmd = tiddlyweb.commander = {
@@ -52,6 +60,15 @@ var cmd = tiddlyweb.commander = {
 				$(this).removeAttr("style");
 			});
 		}
+	},
+	saveEntity: function() {
+		var entity = $(".pane article").data("entity");
+		var name = entity.name || entity.title; // XXX: hacky (violates encapsulation)
+		// XXX: notify is a bad feedback pattern (global, non-localized)
+		var callback = function(data, status, xhr) {
+			cmd.notify(name + " saved successfully", "info"); // XXX: i18n
+		};
+		entity.put(callback, errback);
 	},
 	notify: function(msg, type) {
 		type = type || "info";
@@ -76,11 +93,6 @@ var filterList = function(ev) {
 			el.slideUp();
 		}
 	});
-};
-
-var errback = function(xhr, error, exc) {
-	var msg = xhr.statusText + ": " + xhr.responseText;
-	cmd.notify(msg, "error");
 };
 
 var columnActions = { // XXX: rename?
@@ -457,6 +469,10 @@ $.ajax = function(options, isCallback) {
 		return setTimeout(function() {
 			$.ajax(options, true);
 		}, 500);
+	}
+
+	if(options.type != "GET") {
+		console.log("AJAX", options);
 	}
 
 	var xhr = {};

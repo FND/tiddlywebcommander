@@ -140,11 +140,14 @@ footer .username {
 	background-color: #F88 !important;
 }
 
-#btnFullscreen {
+.pane .button {
 	display: block;
 	float: right;
-	margin-left: 10px;
 	margin-bottom: 10px;
 	border-top-width: 0;
+}
+
+.pane #btnFullscreen {
+	border-left-width: 0;
 	border-right-width: 0;
 }
