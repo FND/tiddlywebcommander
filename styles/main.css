@@ -132,6 +132,10 @@ footer .username {
 	background-color: #FCEFA1;
 }
 
+.active {
+	background-color: #FFFEEE;
+}
+
 .error {
 	background-color: #F88 !important;
 }

@@ -227,8 +227,32 @@ tiddlyweb.Recipe.prototype.render = function() {
 		return item[1] ? item[0] + "?" + item[1] : item[0];
 	}).join("\n");
 	content = $("<pre />").text(content);
-	return $("<article />").append(lbl).append(desc).append(policy).
-		append(content);
+	var container = $("<article />").data("entity", this).
+		append(lbl).append(desc).append(policy).append(content);
+
+	editable("p, pre", container[0], tiddlyweb.Recipe.onChange);
+
+	return container;
+};
+tiddlyweb.Recipe.onChange = function(ev) {
+	var el = $(this);
+	var recipe = el.closest("article").data("entity");
+	switch(this.nodeName.toLowerCase()) {
+		case "p": // TODO: enforce single line
+			recipe.desc = el.text();
+			break;
+		case "pre":
+			var lines = el.html().split("\n");
+			recipe.recipe = $.map(lines, function(item, i) {
+				var arr = item.split("?");
+				var bag = arr.shift();
+				var filter = arr.join("?");
+				return [[bag, filter]]; // nested array prevents flattening
+			});
+			break;
+		default:
+			break;
+	}
 };
 
 tiddlyweb.Bag.prototype.render = function() {
@@ -236,14 +260,47 @@ tiddlyweb.Bag.prototype.render = function() {
 	$("<a />").attr("href", this.route()).text(this.name).appendTo(lbl);
 	var desc = $("<p />").text(this.desc);
 	var policy = this.policy ? this.policy.render() : null;
-	return $("<article />").append(lbl).append(desc).append(policy);
+	var container = $("<article />").data("entity", this).
+		append(lbl).append(desc).append(policy);
+
+	editable("p, pre", container[0], tiddlyweb.Bag.onChange);
+
+	return container;
+};
+tiddlyweb.Bag.onChange = function(ev) { // TODO: DRY (cf. Recipe)
+	var el = $(this);
+	var bag = el.closest("article").data("entity");
+	switch(this.nodeName.toLowerCase()) {
+		case "p": // TODO: enforce single line
+			bag.desc = el.text();
+			break;
+		default:
+			break;
+	}
 };
 
 tiddlyweb.Tiddler.prototype.render = function() {
 	var lbl = $("<h3 />");
 	$("<a />").attr("href", this.route()).text(this.title).appendTo(lbl);
+	// TODO: tags
 	var txt = $("<pre />").text(this.text);
-	return $("<article />").data("tiddler", this).append(lbl).append(txt);
+	var container = $("<article />").data("entity", this).
+		append(lbl).append(txt);
+
+	editable("p, pre", container[0], tiddlyweb.Tiddler.onChange);
+
+	return container;
+};
+tiddlyweb.Tiddler.onChange = function(ev) { // TODO: DRY (cf. Recipe)
+	var el = $(this);
+	var tiddler = el.closest("article").data("entity");
+	switch(this.nodeName.toLowerCase()) {
+		case "pre": // TODO: enforce single line
+			tiddler.text = el.html();
+			break;
+		default:
+			break;
+	}
 };
 
 tiddlyweb.Policy.prototype.render = function() {
@@ -351,6 +408,18 @@ tiddlyweb.Policy.onChange = function(ev) {
 			find("td:nth-child(" + (colIndex + 1) + ") input[type=checkbox]").
 			removeAttr("checked");
 	}
+};
+
+var editable = function(selector, context, onChange) {
+	$(selector, context).attr("contentEditable", "true"). // XXX: inserting line breaks sometimes leads to new paragraph elements being created
+		live("focus", function(ev) {
+			$(this).addClass("active");
+		}).live("blur", function(ev) {
+			var el = $(this).removeClass("active");
+			var txt = el.html().replace(/<br>|<div>/g, "\n").replace(/<\/div>/g, ""); // XXX: sometimes can contain "&nbsp;"
+			el.html(txt);
+			onChange.apply(this, arguments);
+		});
 };
 
 var getHost = function(cue) {
