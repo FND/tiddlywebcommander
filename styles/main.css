@@ -98,6 +98,23 @@ footer .username {
 	background-color: #F8F8F8;
 }
 
+.column li a {
+	padding-left: 22px;
+	background-repeat: no-repeat;
+	background-position: 2px center;
+}
+
+.column.index li a,
+.column.recipes li a,
+.column.bags li a {
+	background-image: url(data:image/gif;base64,R0lGODlhEAAQAJEDAP346fDUdNmMNP///yH5BAEAAAMALAAAAAAQABAAAAI2nI+py40BYwC0AiMslfCOGWlVgG1cKJShCKRDpnFtuQHn/Nr2ObkwH/HtgDiI4IhMCkiOZrMAADs=);
+}
+
+.column.tiddlers li a,
+.column.revisions li a {
+	background-image: url(data:image/gif;base64,R0lGODlhEAAQAJECAMzMzPz8/P///wAAACH5BAEAAAIALAAAAAAQABAAAAIvFI4JIW0BYzysLYmpxfzsoFwQ8HES+YDhhYrm+K1s+YLxCqe1ncq5+2rtfjKFoAAAOw==);
+}
+
 .button {
 	border: 1px solid #CCC;
 	padding: 2px 5px;

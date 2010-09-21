@@ -17,7 +17,7 @@ var init = function() {
 	col.listType = "ul";
 	delete col.label;
 	col.controls = null;
-	col = col.render().appendTo("nav.pane");
+	col = col.render().addClass("index").appendTo("nav.pane");
 	$("li", col).eq(2).find("a").addClass("disabled").unbind("click"); // XXX: hacky?
 
 	$("nav li a").live("click", function(ev) { // XXX: breaks encapsulation!?
@@ -47,7 +47,7 @@ var cmd = tiddlyweb.commander = {
 		if(items) {
 			col.data = items;
 		}
-		col.render().appendTo("nav.pane");
+		return col.render().addClass(type).appendTo("nav.pane");
 	},
 	toggleFullscreen: function() {
 		var els = $(".pane:visible");
@@ -320,11 +320,11 @@ $.ajax = function(options, isCallback) {
 				case "recipes":
 					data = {
 						desc: "lorem ipsum dolor sit amet",
-						policy: new tiddlyweb.Policy({
+						policy: {
 							"read": [],
 							"manage": ["R:ADMIN"],
 							"owner": "administrator"
-						}),
+						},
 						recipe: [
 							["Alpha", ""],
 							["Charlie", "select=tag:foo"],
@@ -335,7 +335,7 @@ $.ajax = function(options, isCallback) {
 				case "bags":
 					data = {
 						desc: "lorem ipsum dolor sit amet",
-						policy: new tiddlyweb.Policy({
+						policy: {
 							"read": [],
 							"write": ["fnd", "cdent", "psd"],
 							"create": ["ANY"],
@@ -343,7 +343,7 @@ $.ajax = function(options, isCallback) {
 							"manage": ["R:ADMIN"],
 							"accept": ["R:ADMIN"],
 							"owner": "administrator"
-						})
+						}
 					};
 					if(resource == "Bravo") {
 						data = null;
