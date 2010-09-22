@@ -309,9 +309,9 @@ $.ajax = function(options, isCallback) {
 			break;
 		case "status":
 			data = {
-				username: "GUEST",
-				challengers: ["cookie_form"],
-				version: "1.2.1"
+				username: "DEV",
+				challengers: ["N/A"],
+				version: "mock"
 			};
 			break;
 		default:
