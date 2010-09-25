@@ -99,6 +99,7 @@ var columnActions = { // XXX: rename?
 	index: function(name, column) { // XXX: rename?
 		if(name == "bags" || name == "recipes") {
 			var collection = new tiddlyweb.Collection(name, host);
+			cmd.addNavColumn(column.node, "pending", ["loading..."]); // XXX: i18n
 			var callback = function(data, status, xhr) {
 				cmd.addNavColumn(column.node, name, data);
 			};
@@ -123,6 +124,7 @@ var columnActions = { // XXX: rename?
 		};
 		recipe.get(eCallback, errback);
 
+		cmd.addNavColumn(column.node, "pending", ["loading..."]); // XXX: i18n
 		var cCallback = function(data, status, xhr) {
 			var titles = $.map(data, function(item, i) {
 				return item.title;
@@ -147,6 +149,7 @@ var columnActions = { // XXX: rename?
 		};
 		bag.get(eCallback, eErrback);
 
+		cmd.addNavColumn(column.node, "pending", ["loading..."]); // XXX: i18n
 		var cCallback = function(data, status, xhr) {
 			var titles = $.map(data, function(item, i) {
 				return item.title;
@@ -167,6 +170,7 @@ var columnActions = { // XXX: rename?
 		};
 		tid.get(eCallback, errback);
 
+		cmd.addNavColumn(column.node, "pending", ["loading..."]); // XXX: i18n
 		var cCallback = function(data, status, xhr) {
 			var names = $.map(data, function(item, i) {
 				return item.revision;
