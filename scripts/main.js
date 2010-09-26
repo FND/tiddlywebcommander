@@ -142,6 +142,7 @@ var columnActions = { // XXX: rename?
 		var eErrback = function(xhr, error, exc) {
 			if(xhr.status == 401) {
 				bag.desc = "unauthorized"; // XXX: i18n -- XXX: hacky?
+				delete bag.policy;
 				bag.render().replaceAll(".pane article").addClass("error"); // XXX: selector too unspecific?!
 			} else {
 				errback.apply(this, arguments);
