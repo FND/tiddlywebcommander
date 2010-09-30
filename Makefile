@@ -15,7 +15,7 @@ lib:
 		"http://github.com/tiddlyweb/chrjs/raw/master/ui.css"
 
 spa: lib
-	spac index.html
+	spac --no-legacy index.html
 
 purge:
 	cat .gitignore | while read -r entry; do rm -r $$entry; done || true
