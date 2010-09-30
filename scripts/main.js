@@ -12,8 +12,8 @@ var init = function() {
 		$(".username", statusBar).text(data.username);
 	});
 
-	var col = new Column("index", []);
-	col.items = ["recipes", "bags", "users", "info"]; // no sorting -- XXX: i18n -- XXX: info unnecessary!?
+	var col = new Column("index", ["recipes", "bags", "users", "info"]); // XXX: i18n
+	col.noSort = true;
 	col.listType = "ul";
 	delete col.label;
 	col.controls = null;
@@ -41,12 +41,13 @@ var errback = function(xhr, error, exc) {
 };
 
 var cmd = tiddlyweb.commander = {
-	addNavColumn: function(list, type, names, items) {
-		list.nextAll().remove();
+	addNavColumn: function(node, type, names, items, noSort) {
+		node.nextAll().remove();
 		var col = new Column(type, names);
 		if(items) {
 			col.data = items;
 		}
+		col.noSort = noSort || false;
 		return col.render().addClass(type).appendTo("nav.pane");
 	},
 	toggleFullscreen: function() {
@@ -176,7 +177,7 @@ var columnActions = { // XXX: rename?
 			var names = $.map(data, function(item, i) {
 				return item.revision;
 			});
-			cmd.addNavColumn(column.node, "revisions", names, data);
+			cmd.addNavColumn(column.node, "revisions", names, data, true);
 		};
 		tid.revisions().get(cCallback, errback);
 	},
@@ -198,11 +199,7 @@ var Column = function(type, items) {
 	this.type = type;
 	this.label = tiddlyweb._capitalize(type); // XXX: hacky?
 	this.listType = "ol";
-	this.items = items.sort(function(a, b) { // XXX: inefficient!?
-		var x = a.toLowerCase ? a.toLowerCase() : a;
-		var y = b.toLowerCase ? b.toLowerCase() : b;
-		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-	});
+	this.items = items;
 	var self = this;
 	this.onClick = function(ev) {
 		var name = $(this).text(); // XXX: brittle (e.g. i18n)
@@ -224,6 +221,11 @@ Column.prototype.render = function() {
 	var heading = this.label ? $("<h3 />").text(this.label) : null;
 	var controls = this.controls ? this.controls.clone(true) : null;
 	this.node = $('<section class="column" />').append(heading).append(controls);
+	var items = this.noSort ? this.items : this.items.sort(function(a, b) { // XXX: inefficient!?
+		var x = a.toLowerCase ? a.toLowerCase() : a;
+		var y = b.toLowerCase ? b.toLowerCase() : b;
+		return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+	});
 	var self = this;
 	$("<" + this.listType + " />").
 		append($.map(this.items, function(item, i) {
@@ -361,7 +363,9 @@ $.ajax = function(options, isCallback) {
 					data = {
 						title: resource,
 						text: "lorem ipsum\ndolor sit amet\n\nconsectetur adipisicing elit\nsed do eiusmod tempor",
-						bag: bag
+						bag: bag,
+						created: "20100930160300",
+						modified: "20100930160530"
 					};
 					if(recipe) {
 						data.recipe = recipe;
@@ -370,7 +374,9 @@ $.ajax = function(options, isCallback) {
 				case "revisions":
 					data = {
 						title: path.pop(),
-						text: "lorem ipsum\ndolor sit amet"
+						text: "lorem ipsum\ndolor sit amet",
+						created: "20100929110300",
+						modified: "20100929110400"
 					};
 					break;
 			}
