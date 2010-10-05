@@ -238,8 +238,11 @@ Column.prototype.render = function() {
 };
 
 var getHost = function(cue) {
+	var prefix = "host:";
 	var loc = document.location;
-	var host = loc.hash.split("host:")[1];
+	var host = loc.hash.split(prefix);
+	host.shift();
+	host = host.join(prefix);
 	if(host) {
 		return host.replace(/\/$/, "");
 	} else if(loc.protocol == "file:") {
