@@ -39,6 +39,10 @@
 		if(!window.jQuery) {
 			document.write('<script src="scripts/jquery.js"><\/script>');
 		}
+		// request enhanced privileges on file URIs
+		if(window.location.protocol == "file:") {
+			document.write('<script src="scripts/sudo.js"><\/script>');
+		}
 		// optionally activate dev mode
 		if(document.location.hash.indexOf("devmode:true") != -1) {
 			document.write('<script src="scripts/dev.js"><\/script>');
