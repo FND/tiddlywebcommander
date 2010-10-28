@@ -8,7 +8,7 @@ var init = function() {
 	// display host in status bar -- TODO: use onhashchange event to update live
 	var statusBar = $("footer p");
 	$(".host", statusBar).text(host);
-	$.getJSON(host + "/status", function(data, status, xhr) {
+	$.getJSON(host + "status", function(data, status, xhr) {
 		$(".username", statusBar).text(data.username);
 	});
 
