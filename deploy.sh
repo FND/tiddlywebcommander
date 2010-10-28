@@ -10,8 +10,8 @@ set -e
 
 username=${1:?}
 password=${2:?}
-space=${3-$username}
-host=${4-http://tiddlyspace.com}
+space=${3:-$username}
+host=${4:-http://tiddlyspace.com}
 
 recipe="${space}_public"
 options="-X PUT -u $username:$password"
