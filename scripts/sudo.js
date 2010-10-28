@@ -1,6 +1,6 @@
 var sudo = function(fn) {
 	if(document.location.protocol.indexOf("file") == 0 && window.Components &&
-		window.netscape && window.netscape.security) {
+			window.netscape && window.netscape.security) {
 		window.netscape.security.PrivilegeManager.
 			enablePrivilege("UniversalBrowserRead");
 	}

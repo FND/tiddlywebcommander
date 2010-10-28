@@ -1,6 +1,6 @@
 .PHONY: lib spa purge
 
-jquery_version = 1.4.2
+jquery_version = 1.4
 
 lib:
 	curl -o "scripts/jquery.js" \
