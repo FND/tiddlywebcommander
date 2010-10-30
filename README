@@ -1,1 +1,8 @@
 TiddlyWeb explorer and administration
+
+    $ make lib # get dependencies
+
+    $ make spa # create single-page application
+
+Documentation:
+http://commander.tiddlyspace.com/GettingStarted
