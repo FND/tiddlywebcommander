@@ -1,4 +1,4 @@
-.PHONY: lib spa purge
+.PHONY: lib deploy spa purge
 
 jquery_version = 1.4
 
@@ -13,6 +13,12 @@ lib:
 		"http://github.com/tiddlyweb/chrjs/raw/master/ui.js"
 	curl -o "styles/widgets.css" \
 		"http://github.com/tiddlyweb/chrjs/raw/master/ui.css"
+
+deploy:
+	rm index.spa.html || true
+	make spa
+	scp index.spa.html fnd.lewcid.org:fnd.lewcid.org/misc/tiddlywebcommander.html
+	./deploy.sh fnd commander
 
 spa: lib
 	spac --no-legacy index.html

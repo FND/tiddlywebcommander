@@ -1,17 +1,21 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # deploy to TiddlySpace
 #
 # Usage:
-#  ./deploy.sh <username> <password> [space [host]]
+#  ./deploy.sh <username> [space [password [host]]]
 
 set -x
 set -e
 
 username=${1:?}
-password=${2:?}
-space=${3:-$username}
+space=${2:-$username}
+password=$3
 host=${4:-http://tiddlyspace.com}
+
+if [ -z $password ]; then
+	read -s -p "Enter password: " password
+fi
 
 recipe="${space}_public"
 options="-X PUT -u $username:$password"
