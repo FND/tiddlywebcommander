@@ -8,11 +8,11 @@ lib:
 	curl -o "scripts/jquery-json.js" \
 		"http://jquery-json.googlecode.com/files/jquery.json-2.2.min.js"
 	curl -o "scripts/chrjs.js" \
-		"http://github.com/tiddlyweb/chrjs/raw/master/main.js"
+		"https://github.com/tiddlyweb/chrjs/raw/master/main.js"
 	curl -o "scripts/chrjs.ui.js" \
-		"http://github.com/tiddlyweb/chrjs/raw/master/ui.js"
+		"https://github.com/tiddlyweb/chrjs/raw/master/ui.js"
 	curl -o "styles/widgets.css" \
-		"http://github.com/tiddlyweb/chrjs/raw/master/ui.css"
+		"https://github.com/tiddlyweb/chrjs/raw/master/ui.css"
 
 deploy:
 	rm index.spa.html || true
