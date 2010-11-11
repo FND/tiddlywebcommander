@@ -8,7 +8,7 @@ var init = function() {
 	// display host in status bar -- TODO: use onhashchange event to update live
 	var statusBar = $("footer p");
 	$(".host", statusBar).text(host);
-	$.getJSON(host + "status", function(data, status, xhr) {
+	$.getJSON(host + "/status", function(data, status, xhr) {
 		$(".username", statusBar).text(data.username);
 	});
 
@@ -243,17 +243,20 @@ var getHost = function(cue) {
 	var host = loc.hash.split(prefix);
 	host.shift();
 	host = host.join(prefix);
+	var uri;
 	if(host) {
-		return host.replace(/\/$/, "");
+		uri = host.replace(/\/$/, "");
 	} else if(loc.protocol == "file:") {
-		return "./";
+		uri = "";
+	} else {
+		uri = loc.protocol + "//" + loc.hostname;
+		if(loc.port && $.inArray(loc.port, ["80", "443"]) == -1) {
+			uri += ":" + loc.port;
+		}
+		var path = loc.pathname.indexOf(cue) != -1 ? loc.pathname.split(cue)[0] : "/";
+		uri += path;
 	}
-	var uri = loc.protocol + "//" + loc.hostname;
-	if(loc.port && $.inArray(loc.port, ["80", "443"]) == -1) {
-		uri += ":" + loc.port;
-	}
-	var path = loc.pathname.indexOf(cue) != -1 ? loc.pathname.split(cue)[0] : "/";
-	return uri + path;
+	return uri.replace(/\/$/, "");
 };
 
 init();
