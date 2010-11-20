@@ -1,3 +1,5 @@
+(function($) {
+
 var sudo = function(fn) {
 	if(document.location.protocol.indexOf("file") == 0 && window.Components &&
 			window.netscape && window.netscape.security) {
@@ -16,3 +18,5 @@ $.ajax = function() {
 		return ajax.apply(self, args);
 	});
 };
+
+})(jQuery);
