@@ -22,6 +22,7 @@ deploy:
 
 spa: lib
 	spac --no-legacy index.html
+	./spa.py index.spa.html
 
 purge:
 	cat .gitignore | while read -r entry; do rm -r $$entry; done || true
